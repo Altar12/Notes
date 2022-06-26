@@ -1,0 +1,19 @@
+git status : shows files to which changes were made
+git add <filename> : add the file to the staging area, file shud be in staging area before commiting
+git restore --staged <filename> : remove the file from staging area
+git restore <filename> : the specified file shud not be in staging area. Discard changes made if any to the specified file
+git diff <filename> : see the changes made in that file
+git commit -m <msg> : msg is a string, enclose in double quotes
+git commit --amend : instead of creating new commit, amend the latest one
+git log/ git log <-n>: see history of all commits on the current branch/ shows latest n commits
+git show <commit_id> : see the changes made in the commit with the given commit id
+git branch : see the current branch
+git branch -d <branchname> : delete the specified branch
+git branch <branchname> : creates a branch with the specified name
+git checkout -b <branchname> : create a new branch with the provided name, and switch to that branch
+git checkout <branchname> : change branch to the branchname specified
+git merge <branchname>: merge the specified branch to the current branch
+git reset --hard HEAD^ : revert the changes by latest commit and nothing in staging area
+git reset --soft <commit_id> : revert the branch state to commit id specified and staging area's state to just before the next commit to the one specified
+git push : push the changes in the local to the remote repository
+
