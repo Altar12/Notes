@@ -1,0 +1,21 @@
+java program --java compiler--> java bytecode --JVM--> machine code --CPU--> output
+
+- Java Runtime Environment (JRE): It is a software package that provides java class libraries, JVM and other components required to run java applications.
+- JRE = JVM + class libraries
+- only JRE is required to run java programs
+- for developing java programs, JDK is required
+- JDK = JRE + compilers + debuggers + javadoc + ... (JRE + everything required for development)
+- java identifiers can contain '$' symbol. regex for java identifiers = [a-zA-Z_$][a-zA-Z_$0-9]*
+- four types of variables in java: instance variables, class variables, local variables, parameters
+- 8 primitive data types in java: boolean(1b), char(2B unicode char), byte(1B), short(2B), int(4B), long(8B), float(4B), double(8B)
+- 3.45, 3.46e2 : double literals
+- 3.45F, 3.46e2f : float literals (end with F or f)
+- 16, 0b10000, 020, 0x10 : integer literals
+- 16L, 0b10000L : long literals
+- java does not have unsigned integers
+- >> : signed right shift operator, >>> : unsigned right shift operator
+- can initialize arrays with syntax {ele1, ele2, ...} in declaration statement only i.e. type[] myArray = {ele1, ele2} is allowed but myArray = {ele1, ele2} is not allowed
+- syntax for allocating memory for 2D arrays: type[][] array = new type[r][c] where specifying c is optional
+- two methods for deep copying arrays: 
+1. dest = new type[size];System.arraycopy(src, srcStartIndex, dest, destStartIndex, length);
+2. dest = Arrays.copyOfRange(src, startIndex, endIndex+1);
