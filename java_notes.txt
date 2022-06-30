@@ -19,3 +19,26 @@ java program --java compiler--> java bytecode --JVM--> machine code --CPU--> out
 - two methods for deep copying arrays: 
 1. dest = new type[size];System.arraycopy(src, srcStartIndex, dest, destStartIndex, length);
 2. dest = Arrays.copyOfRange(src, startIndex, endIndex+1);
+- don't close any Scanner object, close only when no more input is required in the program
+
+- java regex:
+1. [abc] : matches 'a', 'b' or 'c'
+2. [^abc] : matches anything except 'a', 'b' or 'c'
+3. [0-9] : matches any number
+4. | : OR separator
+5. . : matches any single character
+6. ^ : searches for pattern at string beginning (eg. "^Hello")
+7. $ : searches for pattern at string end (eg. "Hello$")
+8. \d : [0-9]
+9. \s : matches white space
+10. \b : used for specifying word boundary, eg. "\\bfor\\b" will match independent word "for" only, whereas "\\bfor" will match independent "for" or any word beginning with for (eg. "forehead)
+11. \uxxxx : matches a unicode char specified by hex representation xxxx
+12. n{x} : appear x no. of times
+13. n{x,y} : appear x to y no. of times
+14. n{x,} : appear x or more no. of times
+15. n+ : n{1,}
+16. n* : n{0,}
+17. n? : n{0,1}
+
+-strObj.equals(strObj1) checks actual string content whereas strObj == strObj1 checks for the reference value
+-java string methods: strObj.contains(string), strObj.substring(startIndex, endIndex+1), strObj.replace(oldChar, newChar), strObj.replaceAll(regex, newSequence), strObj.replaceFirst(regex, newSequence), strObj.matches(regex), strObj.trim(), strObj.split(regex, limit), strObj.compareTo(strObj1)/strObj.compareToIgnoreCase(strObj1) - returns -1,0 or 1, String.format(stringWithPlaceHolders, actualValues)-similar to printf, String.join(delimiterString, str1, str2, ...)
