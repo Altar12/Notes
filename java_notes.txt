@@ -42,3 +42,11 @@ java program --java compiler--> java bytecode --JVM--> machine code --CPU--> out
 
 -strObj.equals(strObj1) checks actual string content whereas strObj == strObj1 checks for the reference value
 -java string methods: strObj.contains(string), strObj.substring(startIndex, endIndex+1), strObj.replace(oldChar, newChar), strObj.replaceAll(regex, newSequence), strObj.replaceFirst(regex, newSequence), strObj.matches(regex), strObj.trim(), strObj.split(regex, limit), strObj.compareTo(strObj1)/strObj.compareToIgnoreCase(strObj1) - returns -1,0 or 1, String.format(stringWithPlaceHolders, actualValues)-similar to printf, String.join(delimiterString, str1, str2, ...)
+
+-package: a container that groups related types (classes, interfaces, enumerations, annotations)
+-packages help in reserving class namespace and create a maintainable code
+-import statement is optional, can also use fully qualified name of the class/interface as well
+-access modifiers: used to set the visibility of classes, interfaces, variables, methods, constructors
+-can't set access modifier for getter methods
+-private: only within the class, default: only within the package, protected: within the package and all subclasses only, public: visible everywhere
+-can only set classes as default or public
