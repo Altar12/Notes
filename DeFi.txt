@@ -35,7 +35,7 @@ insurance
 
 the above parts can be combined together in multiple various ways
 
----------------------------------------
+----------------------------------------------------------------
 Yield Farming
 
 yield farming: way of maximizing rate of return on capital, by leveraging different DeFi protocols
@@ -64,6 +64,42 @@ Yield farming strategies: set of steps that aim at generating high yield on the 
 	strategies can be combined to maximise yield even further
 	yield farming strategies can become obsolete very quickly
 
+----------------------------------------------------------------
+Liquidity Pools
 
+Liquidity pools: In essence, are pools of tokens locked in a smart contract
+				 used to facilitate trading by providing liquity
+				 extensively used by some of the dexes
+bancor: one of the first projects that introduced liquidity pools, but were widely popularized by uniswap
 
+Why liquidity pools are needed:
+In traditional order book exchange, buyers(bidders) set max price they r willing to pay for an asset
+and sellers set minimum price they r willing to sell their asset for
+	1. If the both the set prices do not match, trading simply can not happen
+	2. Also even if the price matches, it can happen that amount of coins offered by seller is less than what buyers want, trade will not happen in this case also
+solution to above problem employed by order book exchanges: Market Makers
+Market Makers: entities that facilitate trading by always willing to buy or sell an asset
+	       by doing so they provide liquidity, users can always trade & don't have to wait for a counterparty to show up 
+(MMs usually track the current price of an asset by constantly changing their prices, which results in huge number of orders(or order cancellations) being sent to an exchange)
+Ethereum w/ 12-15 TPS & block time of 10-19 seconds is not viable for order book exchange because on-chain exchange will be:
+slow, expensive(gas fee) & have bad UX, also MMs will go bankrupt by just updating their orders (gas fee)
+Hence, liquidity pools are needed
 
+Working of liquidity pools:
+A simple liquidity pool contains two different types of tokens, & each pools creates a new market for that pair of tokens
+When a new pool is created, the first liquidity provider(LP) sets the inital (relative) price of the two tokens. LP is incentivised to supply equal value(not amount) of both the tokens
+(if the inital price of tokens in the pool diverges from the current global market price, it creates an instant arbitrage opportunity that can result in lost capital for the LP)
+The concept of supplying tokens in a correct ratio remains same for all other LPs that are willing to add more funds to the pool later
+When liquidity is supplied to a pool, the LP receives spcl tokens called LP tokens in proportion to how much liquidity they supplied to the pool
+On a trade facilitated by the pool a fee of 0.3% is proportionally distributed amongst all the LP token holders
+If LP wants to get their underlying liquidity back plus any accrued fee, they must burn their LP tokens
+Automated Market Maker (AMM): each token swap that a liquidity pool facilitates results in price adjustment according to a deterministice pricing algorithm. This mechanism is also called AMM.
+                              liquidity pools across different protocols may use slightly different algorithm
+Basic liquidity pools used by uniswap use a Constant Product Market Maker algorithm
+	makes sure that product of quantities of two supplied tokens always remain same
+	i.e. x*y = k
+	becoz of algo, pool can always provide liquidity no matter how large the trade is, algo asymptotically increases the price of the token as the desired quantity increases
+No need to fuss on math in this section, main takeaway: ratio of tokens in the pool dictates the price
+so if someone buys eth from dai-eth pool, they decrease supply of eth & increase supply of dai -> increase the price of eth & decrease the price of dai
+how much the price moves depends on the size of the trade in proportion to the size of the pool, bigger the size of the pool in comparison to trade size, lesser the price impact (aka slippage) occurs
+becoz larger liquidity pools creates less slippage and result in better trading experience, protcols like balancer started incentiving LPs with extra tokens for providing liquidity to certain pools
