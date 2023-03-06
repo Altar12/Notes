@@ -103,3 +103,39 @@ No need to fuss on math in this section, main takeaway: ratio of tokens in the p
 so if someone buys eth from dai-eth pool, they decrease supply of eth & increase supply of dai -> increase the price of eth & decrease the price of dai
 how much the price moves depends on the size of the trade in proportion to the size of the pool, bigger the size of the pool in comparison to trade size, lesser the price impact (aka slippage) occurs
 becoz larger liquidity pools creates less slippage and result in better trading experience, protcols like balancer started incentiving LPs with extra tokens for providing liquidity to certain pools
+
+----------------------------------------------------------------
+Impermanent Loss
+
+Impermanent loss: temporary loss of funds accruing when providing liquidity.
+				  Most commonly explained as the difference btw holding an asset vs. providing liquidity in that asset.
+				  Is usually observed in standard liquidity pools where the liquidity provider has two provide both assets in the correct ratio & one of the asset is volatile in relation to the other.
+				  Eg. uniswap DAI-ETH50/50 pool, if ETH goes up in value, the pool has to rely on external arbitrageurs continually ensuring that pool price reflects the real world price to maintain the same value of both tokens in the pool.
+				  This leads to a situation where profit from the token that appreciated in value is taken away from the liquidity provider. At this point if LP decides to withdraw their liquidity, impremanent loss becomes permanent.
+
+Example:
+An LP provides liquidity to a DAI-ETH50/50 pool. To supply liquidity the LP has to provide the same value of both tokens to the pool.
+Let's say LP provides liquidity as follows:
+Coin	|	price	|	supplied	|	value
+DAI			$1			10k				$10k
+ETH			$500		20				$10k
+After liquidity has been provided let's say the price of ETH goes up on an external venue (eg. coin base), and now coin base's ETH price if $550.
+An arbitrageurs sees the price differene btw coin base and uniswap and sees that as an opportunity for arbitrage.
+Uniswap uses a constant product AMM to maintain the correct ratio of tokens in the pool. So as more ETH is bought from the pool, the higher the price of ETH becomes.
+Arbitrageur buys ETH from uniswap until there is no price discrepancy btw the price of the two exchanges.
+By plugging the external price in a few formulas that can be derived from the constant product AMM formula, we see that the point where the price of ETH will be $550 is when there are 10,488.09DAI & 19.07ETH in the pool.
+So arbitrageur is able to buy 0.93 ETH to achieve equilibrium in uniswap & coin base's ETH price costing 488.09 DAI & achieving an avg price of 524.83 DAI/ETH.
+Bought ETH can be instantly sold for DAI or any other stable coin on an external venue at price of $550/ETH.
+Arbitrageur just earned (511.5(i.e. 0.93*550) - 488.09) =  ~$25 (minus the trade fees on uniswap)
+Now coming to our LP,
+Before arbitrage LP had a total value of $10k(i.e. 10k DAI) + $10k(i.e. 20 ETH) = $20k
+After arbitrage LP has $10,488.09(i.e. 10,488.09 DAI) + 19.07*$550(i.e. 19.07ETH) = $20976.59
+If the LP simply held the asset without providing liquidity, LP wud have had: $10k(i.e. 10kDAI) + 20*$550(i.e. ETH) = $21k
+LP wud have had $23.41 more if they just held their assets without providing liquidity. The $23.41 is LP's impermanent loss.
+If at this point LP doesn't withdraw their liquidity and the price of ETH goes back to $500, the impermanent loss is cancelled back to zero.
+On the other hand if LP decides to withdraw their liquidity, they wud realise a loss of $23.41 permanently.
+
+Why do people provide liquidity then?
+If the trade fees accrued > impermanent loss, then providing liquidity becomes profitable.
+On top of that, a lot of liquidity pools provide a lot of additional incentives for LPs by offering liquidity mining programs i.e. LPs are rewarded with extra tokens for providing liquidity to certain pools.
+The value of additional tokens in some cases can completely negate the value lost by impermanent loss making providing liquidity highly lucrative.
