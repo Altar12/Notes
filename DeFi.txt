@@ -139,3 +139,65 @@ Why do people provide liquidity then?
 If the trade fees accrued > impermanent loss, then providing liquidity becomes profitable.
 On top of that, a lot of liquidity pools provide a lot of additional incentives for LPs by offering liquidity mining programs i.e. LPs are rewarded with extra tokens for providing liquidity to certain pools.
 The value of additional tokens in some cases can completely negate the value lost by impermanent loss making providing liquidity highly lucrative.
+
+----------------------------------------------------------------
+Lending and Borrowing
+
+DeFi lending allows users to become lenders or borrowers in a completely decentralized or permissionless way while maintaining full custody over their coins.
+DeFi lending is based on smart contracts that run on open blockchains.
+
+Two major lending protocols available: AAVE and Compound
+Both protocols work by creating money markets for particular tokens (such as ETH, DAI, USDC; each token has its own money market).
+Users who want to become lenders supply their tokens to a particular money market & start receiving interest on their tokens according to the current supply APY.
+Supplied tokens are sent to a smart contract & become available for other users to borrow.
+In exchange for supplied tokens the smart contract issues other tokens that represent the supplied tokens + interest. These tokens are called CTokens in compound & ATokens in AAVE and they can be redeemed for the underlying tokens.
+
+Important Note:
+In DeFi pretty much all loans are over-collateralized. This means the user who wants to borrow funds has to supply tokens in the form of collateral that is worth more than the actual loan that they want to take.
+So why wud a user simply not sell their tokens instead of taking a loan? => many reasons, e.g. users don't want to sell their tokens but they need funds to cover unexpected expenses.
+
+There is a limit to the amount that can be borrowed. The amount that can be borrowed depends on 2 main factors:
+1. How much funds are available to be borrowed at a particular market (usually not a problem in active markets, unless someone is trying to borrow a really big amount of tokens)
+2. What is the Collateral Factor of supplied tokens. Collateral Factor determines how much can be borrowed based on the quality of the collateral.
+   ETH for e.g. have a Collateral Factor of 75% on Compound. This means upto 75% of the value of supplied ETH can be used to borrow tokens.
+
+If a user decides to borrow funds, the value of the borrowed amount must always stay lower than the value of their collateral times its collateral factor.
+i.e. Value (of borrowed amount) < Value (of collateral) * Collateral Factor
+If this condition holds there is no limit for how long the user can borrow funds for.
+If the value of the collateral falls below the required collateral lvl, the user's collateral are liquidated in order for the protocol to repay the borrowed amount.
+
+The interest that the lenders receive & the interest that the borrowers have to pay are determined by the ratio btw supply & borrow tokens in a particular market.
+The interest that is paid by borrowers is the interest earned by lenders so the borrow APY is higher than the supply APY in a particular market.
+The interest APYs are calculated per ethereum block, this means DeFi lending provides variable interest rates that can change quite dramatically depending on the lending & borrowing demands for a particular token.
+Biggest difference btw compound and AAVE: both protocols offer variable supply/borrow APYs, AAVE also offers stable borrow APY
+	                                      stable APY is fixed in a short term but it can change in the long term to accomodate changes in the supply demand ratio btw tokens.
+										  on top of stable APYs, AAVE also offers flash loans where users can borrow funds with no upfront collateral for a short period of time (one ethereum transaction).
+
+Example working of DeFi lending protocol:
+Mechanics of Compound & CTokens:
+A user deposits 10 ETH to compound.
+In exchange for 10 ETH compound issues CETH.
+Number of CETH tokens the user will receive depends on the current exchange rate for a particular market.
+When a new market is created, the exchange rate btw CTokens and underlying tokens is set to 0.02 (arbitrary number), so each market starts at 0.02.
+We can also assume that this exchange rate will only increase with each ethereum block.
+If the user supplied 10 ETH when the market was just created, they wud have received 10/0.02 = 500 CETH.
+Becuz the ETH market has been operating for a while we can assume that the exchange rate is already higher, lets say its 0.021.
+This means the user wud receive around 10/0.021 = 476.19 CETH.
+If the user decided to immediately redeem their ETH, they shud receive roughly the same amount as deposited (476.19 * 0.021 = ~10 ETH).
+If the user decided to hold their CETH, with each ETH block, the exchange rate wud increase. The rate of the increase depends on the supply APY which depends on the ratio of supplied & borrowed capital.
+Lets say that exchange rate from CETH to ETH increase by 2*10^-10 with each block.
+Assuming the rate of increase stays the same, for a month we can calculate the interest that can be made during that time. If we have on avg 4 blocks/min, this gives us (2*10^-10) * 4 * 60 * 24 * 30 = 0.00003456.
+So exchange rate after a month = 0.021 + 0.00003456 = 0.02103456. If the user redeems their ETH now, they wud receive 476.19 * 0.02103456 = ~10.0165 ETH.
+So the user just made 0.0165 ETH in a month => ~0.16% return on their ETH.
+
+AAVE uses a similar model with interest being accumulated with every single block. The main difference is that ATokens value is pegged to the underlying token with a 1:1 ratio.
+The interest is distributed to AToken holders directly by continuously increasing their balance.
+AToken holders can also decide to redirect their stream of interest payments to another ETH address.
+
+In case of borrowing, users lock their CTokens or ATokens as collateral & borrow other tokens. Collateral earns interest but users can't redeem or transfer assets while they are being used as collateral.
+The amount that can be borrowed depends on the Collateral Factor of the supplied assets.
+There is also a smart contract that looks at all the collateral across user's account and calculates how much can be safely borrowed without getting liquidated immediately.
+To determine the value of the collateral compound uses its own price feed that takes prices from several highly liquid exchanges, AAVE on the other hand relies on chain link & falls back to their own price feed if necessary.
+If a user decides to repay the borrowed amount & unlock their collateral they wud also have to pay the accrued interest on their borrowed assets. The amount of interest is determined by the borrow APY & is also increased automatically with each ETH block.
+
+Main risk in DeFi lending: Quickly changing APYs. For e.g. during last yield farming craze, the borrow APY on the BAT token went up to over 40%. This can cause unaware users who are not tracking compound interest rates daily to get liquidated by having to pay more than expected in the same period of time.
