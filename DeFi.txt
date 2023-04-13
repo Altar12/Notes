@@ -102,7 +102,7 @@ Basic liquidity pools used by uniswap use a Constant Product Market Maker algori
 No need to fuss on math in this section, main takeaway: ratio of tokens in the pool dictates the price
 so if someone buys eth from dai-eth pool, they decrease supply of eth & increase supply of dai -> increase the price of eth & decrease the price of dai
 how much the price moves depends on the size of the trade in proportion to the size of the pool, bigger the size of the pool in comparison to trade size, lesser the price impact (aka slippage) occurs
-becoz larger liquidity pools creates less slippage and result in better trading experience, protcols like balancer started incentiving LPs with extra tokens for providing liquidity to certain pools
+becoz larger liquidity pools creates less slippage and result in better trading experience, protocols like balancer started incentiving LPs with extra tokens for providing liquidity to certain pools
 
 ----------------------------------------------------------------
 Impermanent Loss
