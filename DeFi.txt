@@ -68,7 +68,7 @@ Yield farming strategies: set of steps that aim at generating high yield on the 
 Liquidity Pools
 
 Liquidity pools: In essence, are pools of tokens locked in a smart contract
-				 used to facilitate trading by providing liquity
+				 used to facilitate trading by providing liquidity
 				 extensively used by some of the dexes
 bancor: one of the first projects that introduced liquidity pools, but were widely popularized by uniswap
 
