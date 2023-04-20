@@ -1,0 +1,237 @@
+nodejs - runtime environment for js
+some of the global variables availble: __dirname, __filename, require, module, process
+every file is a module by default
+can share from a file by manipulating module object, i.e. setting module.exports
+in any other file, the value of module.exports from another file can be accessed using const xyz = require(<PATH_TO_SHARING_FILE>)
+when we write require(<PATH_TO_MODULE>), the code of the specified module actually runs?
+built-in modules (eg.): os, path, fs, http. No need to specify path eg. just do const os = require('os');
+
+//creating a basic server with http module
+const http = require('http');
+const server = http.createServer((req, res) => {
+    //both req & res are objects, we can look up req's properties & use res's properties
+    if(req.url === '/') {
+        res.write('welcome to our home page');
+    } else if(req.url === '/about') {
+        res.write('this is the about page');
+    } else {//can also send back html
+        res.write(`<h1>Oops</h1>
+        <p>we can't find the page u r looking for</p>
+        <a href='/'>go to home</a>`);
+    }
+    res.end();
+});
+server.listen(5000);
+//end
+
+npm-node package manager, automatically installed with node. allows us to do 3 things:
+reuse our own code from one project in another, use code shared by other ppl in our projects, share our code with the world
+A typical node project will have quite a few npm packages as dependencies
+
+local dependency - use the package only in current project
+npm i <packagename>
+
+global dependency - use the package in all node projects
+npm i -g <packagename> //will have to use with sudo
+
+package.json - manifest file, stores info about the project (every node project will have it)
+npm init -y //will create the default package.json
+
+all the required(dependecy) packages for a project are stored under "node_modules" folder & listed in package.json
+when we install a node package as a dependency that package as well as all the packages that r dependencies of that package are also installed
+
+dev dependencies- dependencies only required during development (such as for formatting, restarting server etc) & not needed in production
+npm i <packagename> -D
+
+to uninstall a package: npm uninstall <packagename>
+
+//Events in nodejs, can create custom events & then define code to be executed when they r emitted and also can explicitly emit them
+//start
+const Event = require('events'); //imported the class
+const event = new Event();
+
+event.on('request', (name, id) => {
+    console.log(`${name} with id ${id}`);
+}); //attaching one listener, can attach more as well
+
+event.emit('request', 'Neji', 1); //emit the event
+//end
+
+have to use readStream & writeStream when dealing with big files
+
+----------------http------------------------------
+consider below server:
+const server = require('http').createServer((req, res) => {
+	res.writeHead(200, {'content-type':'text/html'});//pass status code & header key-val pairs
+	res.write('<h1>hello world</h1>'); //response body
+	res.end();
+//have to call res.end() at the end compulsorily, signals the server that all response header & body have been sent
+});
+server.listen(5000);
+
+--------------express---------------------------------
+built on top of node's inbuilt http module
+//start
+const express = require('express');
+const app = express();
+app.get('/', (req, res) => {
+	res.send('home page');
+});
+
+//all method will handle all type of http msgs, i.e. get, post, and everthing else
+//adding '*' as path will match to all the paths
+app.all('*', (req, res) => { //as get is already defined for '/', this will handle all msgs for all paths and all msgs for '/' as well execept get
+	res.status(404).send('page not found'); //can set the status code like this
+});
+app.listen(5000);
+//end
+
+
+//start
+//using express to render html page with accompanying css & js
+const express = require('express');
+const app = express();
+
+//move all your supplementary/resource files(css, images, js files etc) to a folder name public (can name anything)
+app.use(express.static(<PATH_TO_PUBLIC_FOLDER>));
+
+app.get('/', (req, res)=> {
+//lets say our html is stored in a file called index.html
+	res.sendFile(<ABSOLUTE_PATH_TO_index.html>);
+});
+app.listen(5000);
+//end
+in the above eg we dump all our static assets in public folder. we can also dump our index.html in public folder as well and express by default will serve it for the '/' route so the above code will just be reduced to
+//start
+const express = require('express');
+const app = express();
+app.use(express.static(<PATH_TO_PUBLIC_FOLDER>));
+app.listen(5000);
+//end
+
+
+setting up an API = setting up a http interface to interact with our data
+server side rendering = creating dynamic web pages at server side and then sending them
+
+Express is used for either of the below two functions:
+API                       SSR
+json                      template
+send data                 send template
+res.json()                res.render()
+
+route parameters- enable us to set routing for dynamic paths
+placeholders are supplied in the route, which are captured in req.params object
+//start
+app.get('/:first/dummy/:second', (req, res) => { //here first & second are placeholders
+	console.log(req.params); //if hit route is /xyz/dummy/abc, then will print {first: 'xyz', second: 'abc'}
+});
+//end
+
+query string parameters/url parameters - key value pairs that can be passed with the base route to the server, syntax: base_route?url_parameters
+//start
+app.get('/api/test', (req, res) => {
+	//captured in req.query object
+	console.log(req.query) //if searched url is /api/test?first=dummy&id=2, then will print {first: 'dummy', id: '2'}
+});
+//end
+
+whenever we are manipulating the res object based on some condition, its better to return, otherwise error/warning will show up for sending multiple responses
+//start
+app.get('/items', (req, res) => {
+	let res = [1,2,3,4,5,6,7];
+	const {start, end} = req.query; //expecting the form /items?start=1&end=3
+	if(start) {
+		items = items.filter((item,index)=> index>=Number(start));
+	}
+	if(end) {
+		items = items.filter((item,index)=> index<=Number(end));
+	}
+	if(items.length===0) {
+		return res.send('empty array []'); //if len=0 &dont return here, function will continue & express will try to send below res as well
+	}
+	res.json(items); 
+}
+//end
+
+middleware - functions that execute when server receives a req. they have access to both req & res objects
+we create middleware functions and attach it to route methods for which we want them to execute
+//start
+const logger = (req, res, next) {
+	const {url, method} = req;
+	console.log(method, url);
+	next(); //have to pass to the next function, in this case its get function
+}
+app.get('/', logger, (req, res) => { //put all the middlewares btw path & callback
+	res.send('hello from get method'); //will execute logger first & then send the response
+}); 
+//end
+
+can attach a middleware function to all of the routes
+//start
+const func = (req, res, next) => {
+	console.log(req.url); next();
+}
+app.use(func); //attached to all route functions
+//define methods for paths below
+//end
+
+can also attach a middle to a route+all its subroutes (i.e. a base route)
+//start
+const func = (req, res, next) => {
+	console.log(req.url); next();
+}
+app.use('/about', func);
+app.get('/', (req,res)=>{}); //middleware not attached
+app.get('/about', (req,res)=>{}); //attached
+app.get('/about/user', (req,res)=>{}); //attached
+//end
+
+to attach a bunch of middleware functions in app.use, put them together in an array
+eg. app.use('/about', [func1, func2, func3]);
+
+3 types of middleware: user-defined(we write function code), provided by express(eg. express.static) & 3rd party(install with npm)
+
+consider below html form
+<form action="/login" method="POST">
+	<input type="text" name="username" />
+	<input type="text" name="pw" />
+	<input type="submit" value="login" />
+</form>
+when user clicks login btn after entering input(say altar, 123), a POST req is generated to path /login with payload having key-val pairs as {username: "altar", pw: "123"}
+inorder to access this form data sent, we use inbuilt express middleware
+//start
+app.use(express.urlencoded({extended: false})); //will parse form data & put in req.body object, content type of incoming http req is urlencoded
+
+app.post('/login', (req, res)=> {
+	console.log(req.body); //will print {username: "altar", pw: "123"}
+});
+//end
+
+In the frontend, if POST request is made with js(such as axios lib) & not form, we send payload in the form of json. for eg.
+await axios.post('/login', {name: 'Neji'});
+in the server we use express.json() middleware to parse the data
+//start
+app.use(express.json()); //will parse the json data & put in req.body object, content type of incoming http req is json
+app.post('/login', (req,res)=> {
+	console.log(req.body); //will print {name: 'Neji'}
+});
+//end
+
+
+to separate out routing for different paths, we use express.Router().for eg. in a separate file(say data.js) we incorporate all routes for /api/data
+//start -file data.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req,res)=>{}); //whatever path is specified is built on top of base path
+router.put('/:id', (req,res)=>{});
+
+module.exports = router;
+
+//below are the contents of app.js
+const express = require('express');
+const data = require(<PATH_TO_data.js>);
+
+app.use('/api/data', data); //supply the base path
+app.listen(5000);
+//end
