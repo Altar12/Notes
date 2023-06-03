@@ -16,4 +16,3 @@ git merge <branchname>: merge the specified branch to the current branch
 git reset --hard HEAD^ : revert the changes by latest commit and nothing in staging area
 git reset --soft <commit_id> : revert the branch state to commit id specified and staging area's state to just before the next commit to the one specified
 git push : push the changes in the local to the remote repository
-
