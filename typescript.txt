@@ -1,43 +1,45 @@
+Typescript notes:
+
 *built in types:
-also availabel w/ js: number, string, boolean, null, undefined, object
-more types: any, arrays (number[], string[]), tuples, enums, objects ({id: number, name: string})
+	also availabel w/ js: number, string, boolean, null, undefined, object
+	more types: any, arrays (number[], string[]), tuples, enums, objects ({id: number, name: string})
 *any: default type, a variable becomes of type 'any' if it's not initialized as well as annotated during declaration
 *tuple: fixed length array, each element has a particular type
-let myTuple: [string, number] = ['Mike', 20];
+	let myTuple: [string, number] = ['Mike', 20];
 *enums: enum Size { Small, Medium, Large }
-let tShirtSize: Size = Size.Small;
+		let tShirtSize: Size = Size.Small;
 *object example:
-let person: {name: string, speak: (string)=>void} = {name: 'John',
-speak: (msg)=> {
-console.log(msg,'from John');
-}
-};
+	let person: {name: string, speak: (string)=>void} = {name: 'John',
+														 speak: (msg)=> {
+														 	console.log(msg,'from John');
+														 	}
+														};
 *making a property read only in an object
-let person: { readonly id: number, name: string} = {id:1, name:'Shubh'};//id is read only
+	let person: { readonly id: number, name: string} = {id:1, name:'Shubh'};//id is read only
 *default arguments:
-function add(x: number, y=20): number {
-return x+y;
-}
+	function add(x: number, y=20): number {
+		return x+y;
+	}
 *type aliasing
-type Employee = {id: number, name: string};
-let person: Employee = {id:1, name:'John'};
+	type Employee = {id: number, name: string};
+	let person: Employee = {id:1, name:'John'};
 *union type: used to express a variable can have a type from the list of types provided
-function kgToPounds(weight: number|string): number {
-if (typeof weight === 'number')
-return weight*2.2;
-else
-return parseInt(weight)*2.2;
-}
+	function kgToPounds(weight: number|string): number {
+		if (typeof weight === 'number')
+			return weight*2.2;
+		else 
+			return parseInt(weight)*2.2;
+	}
 *intersection type: can be used to provide inheritance like functionality
-type Draggable = { drag: ()=>void };
-type Resizable = { resize: ()=>void };
-let uiComponent: Draggable & Resizable = {drag: () => {console.log('dragging');},
- resize: () => {console.log('changing size');}
- };
+	type Draggable = { drag: ()=>void };
+	type Resizable = { resize: ()=>void };
+	let uiComponent: Draggable & Resizable = {drag: () => {console.log('dragging');},
+											  resize: () => {console.log('changing size');}
+											  };
 *literal type: used to restrict values of a variable
-let num: 50 = 50;
-type Quantity = 50|100;
-let value: Quantity = 100;
+	let num: 50 = 50;
+	type Quantity = 50|100;
+	let value: Quantity = 100;
 * the ?. operator just returns undefined if the variable in lhs is null or undefined, otherwise continues with the operation on rhs
-// if type of nums is number[] | null
-console.log(nums?.[1]);
+	// if type of nums is number[] | null
+		console.log(nums?.[1]);
